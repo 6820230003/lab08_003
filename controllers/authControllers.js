@@ -7,9 +7,9 @@ export const register = async (req, res) => {
    const { username, password, name, role } = req.body;
    try {
      const insertSql = `
-     INSERT INTO users (user_name, password, name, role)
+     INSERT INTO users (username, password, name, role)
      VALUES ($1, $2, $3, $4)
-     RETURNING id, username, created_at
+     RETURNING id, username
      `;
 
 //hashed
