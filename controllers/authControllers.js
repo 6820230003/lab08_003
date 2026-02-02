@@ -6,6 +6,16 @@ import pool from "../db/index.js";
 export const register = async (req, res) => {
   const { username, password, name, role } = req.body ?? {};
 
+
+const checkUser = `SELECT * FROM users WHERE username = $1` ;
+const checkResult = await pool.query(checkUser , [username]) ;
+
+if(checkResult.rowCount > 0) {
+  return res.status(400).json({message: 'Username already exists.'})
+}
+
+  
+
   if (!username || !password) {
     return res.status(400).json({ message: "username & password are required" });
   }
@@ -73,7 +83,7 @@ export const login = async (req, res) => {
     const refreshToken = jwt.sign(
       payload,
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "7d" } 
+      { expiresIn: "1hr" } 
     );
 
     res.json({ accessToken, refreshToken });
